@@ -1,3 +1,7 @@
+
+
+Goal: Repositorio de template para desarrollo de proyectos de data science con IA
+
 # Quick start
 
 ## Environment (first time)
@@ -9,3 +13,5 @@ make install-init
 ## Reset completo del entorno
 
 make install-reset
+
+
