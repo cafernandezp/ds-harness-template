@@ -4,6 +4,10 @@
 
 ```
 src/
+    functions/
+        inspection.py
+        evals.py
+        feature_selection.py
     exploration/
     etl/
         perimeter/
