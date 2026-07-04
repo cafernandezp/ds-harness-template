@@ -2,7 +2,7 @@
 
 # Repository Structure
 
-'''
+```
 src/
     exploration/
     etl/
