@@ -1,8 +1,7 @@
-
-
 # Repository Structure
 
 ```
+playground/
 src/
     functions/
         inspection.py
@@ -33,6 +32,4 @@ src/
                 evals.py
     inference/
         perimeter/
-        
-        
 ```
