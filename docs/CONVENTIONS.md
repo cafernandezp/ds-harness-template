@@ -1,0 +1,57 @@
+# CONVENTIONS.md
+
+> Consulted by IMPLEMENTER and REVIEWER before writing or reviewing any code.
+> Static reference — update only when a convention changes project-wide.
+
+## 1. Naming
+- Variables: `X_train`, `y_train`, `X_val`, `y_val`, `X_test`, `y_test`.
+- Functions: verb_noun (`compute_mae`, `filter_by_variance`).
+- Library modules and stage-specific scripts must never share a filename
+  (e.g. a shared `metrics.py` in `src/lib/` vs. a model-specific `evals.py`
+  in `final_model/` — different names prevent trace ambiguity).
+
+## 2. Code style
+- Functional over OOP.
+- Type hints required on every function signature.
+- Docstrings required (purpose, args, returns).
+
+## 3. Imports
+- No wildcard imports.
+- Absolute imports from the `src` package (`from src.lib.metrics import compute_mae`).
+- No `sys.path` manipulation.
+
+## 4. File formats
+- Parquet over CSV for tabular data.
+- Any artifact that other code depends on downstream (e.g. a selected
+  feature list) must be a `.py` module, not a notebook or a CSV.
+
+## 5. Metrics
+- Primary metric: <TBD per project>
+- Secondary metric: <TBD per project>
+
+## 6. `lib/` vs. orchestration — placement rule
+- If a module is reused by more than one model OR more than one type of
+  pipeline stage → `src/lib/`.
+- If a module is specific to one script of one stage of one model →
+  it stays nested inside that script's folder, even though it is also
+  written as a function (functional style applies repo-wide, it is not
+  the placement criterion).
+
+## 7. Reports & artifacts policy
+- `reports/` is fully gitignored, no per-file exceptions.
+- Artifacts that are decisions consumed by downstream code (e.g. a
+  selected-features list) live in `src/`, version-controlled, never in
+  `reports/`.
+
+## 8. Function signatures
+- Keyword-only arguments for any function with more than 2 parameters.
+- Max 4 arguments per function; refactor into a config object beyond that.
+
+## 9. Reproducibility
+- Fixed `random_state` across all splits, models, and stochastic steps.
+- All transformers fit on train only; never fit on val/test.
+
+## 10. Paths
+- No absolute paths anywhere in `src/`.
+- Repo installed in editable mode (`pip install -e .`) so `src` imports
+  resolve identically regardless of execution location.
