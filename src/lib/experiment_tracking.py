@@ -8,14 +8,14 @@ duplicated across experiment scripts.
 Artifact values are saved using the format that matches their type:
 - pandas.DataFrame -> .csv (easy to open and inspect as a table)
 - dict             -> .json
-- XGBoost model    -> mlflow's native flavor (mlflow.xgboost.log_model)
-                      when use_mlflow=True, since that captures the model
-                      signature/environment and plugs into the Model
-                      Registry — using src.lib.model_io here instead would
-                      throw that metadata away for no benefit
-- any other object  -> assumed to be a model, handled by src.lib.model_io
-                      (used for XGBoost too, but only in manual mode,
-                      where no mlflow flavor is available)
+- anything else    -> assumed to be a trained model; uses its own
+                      `.save_model()` method when available (XGBoost,
+                      LightGBM, and others expose this), falling back to
+                      joblib otherwise. No ML library is hardcoded or
+                      required as a dependency here — this trades away
+                      mlflow's model-specific flavors (which capture a
+                      signature and integrate with the Model Registry)
+                      in favor of staying generic and simple.
 
 Scope: this module is only for small, disposable artifacts tied to a
 single experimental run (e.g. a boruta-shap summary for one trial). Any
@@ -23,19 +23,16 @@ dataset meant to be read later by another script — predictions, a
 preprocessed training matrix, anything reusable — does not belong here.
 Save it as parquet under `src.lib.paths.model_data_dir(model_name)` instead.
 
-Requires: mlflow, pandas, xgboost (pip install mlflow pandas xgboost)
+Requires: mlflow, pandas, joblib (pip install mlflow pandas joblib)
 """
 
+import json
 from pathlib import Path
 from typing import Any
-import json
 
+import joblib
 import mlflow
-import mlflow.xgboost
 import pandas as pd
-import xgboost as xgb
-
-from src.lib.model_io import save_model
 
 
 def log_run(
@@ -68,6 +65,23 @@ def log_run(
         _log_manually(model_name, run_name, params, metrics, artifacts)
 
 
+def _save_artifact(directory: Path, name: str, obj: Any) -> Path:
+    """Save one artifact to `directory`, format chosen by its type."""
+    if isinstance(obj, pd.DataFrame):
+        path = directory / f"{name}.csv"
+        obj.to_csv(path, index=False)
+    elif isinstance(obj, dict):
+        path = directory / f"{name}.json"
+        path.write_text(json.dumps(obj, indent=2))
+    elif hasattr(obj, "save_model"):
+        path = directory / f"{name}.json"
+        obj.save_model(str(path))
+    else:
+        path = directory / f"{name}.joblib"
+        joblib.dump(obj, path)
+    return path
+
+
 def _log_with_mlflow(
     model_name: str,
     run_name: str,
@@ -83,28 +97,9 @@ def _log_with_mlflow(
             mlflow.log_param(key, value)
         for key, value in metrics.items():
             mlflow.log_metric(key, value)
-
         for name, obj in artifacts.items():
-            if isinstance(obj, pd.DataFrame):
-                tmp_path = Path(f"{name}.csv")
-                obj.to_csv(tmp_path, index=False)
-                mlflow.log_artifact(str(tmp_path))
-            elif isinstance(obj, dict):
-                tmp_path = Path(f"{name}.json")
-                tmp_path.write_text(json.dumps(obj, indent=2))
-                mlflow.log_artifact(str(tmp_path))
-            elif isinstance(obj, (xgb.XGBModel, xgb.Booster)):
-                # Use mlflow's own XGBoost flavor rather than a generic
-                # artifact: it captures the model signature and
-                # environment, and plugs into the MLflow Model Registry
-                # if that's ever needed. Duplicating this via model_io
-                # would throw that metadata away for no benefit.
-                mlflow.xgboost.log_model(obj, artifact_path=name)
-            else:
-                # No dedicated mlflow flavor assumed for this type —
-                # fall back to src.lib.model_io, same as manual mode.
-                tmp_path = save_model(obj, Path(name))
-                mlflow.log_artifact(str(tmp_path))
+            tmp_path = _save_artifact(Path("."), name, obj)
+            mlflow.log_artifact(str(tmp_path))
 
 
 def _log_manually(
@@ -121,9 +116,4 @@ def _log_manually(
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
     for name, obj in artifacts.items():
-        if isinstance(obj, pd.DataFrame):
-            obj.to_csv(run_dir / f"{name}.csv", index=False)
-        elif isinstance(obj, dict):
-            (run_dir / f"{name}.json").write_text(json.dumps(obj, indent=2))
-        else:
-            save_model(obj, run_dir / name)
+        _save_artifact(run_dir, name, obj)
