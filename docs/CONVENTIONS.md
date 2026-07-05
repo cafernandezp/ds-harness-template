@@ -55,3 +55,18 @@
 - No absolute paths anywhere in `src/`.
 - Repo installed in editable mode (`pip install -e .`) so `src` imports
   resolve identically regardless of execution location.
+
+
+## 11. Analysis folders (`*/analysis/`)
+Any folder named `analysis` anywhere under `src/` is reserved for the project
+owner's personal, manual, ad hoc exploration (typically scratch notebooks).
+These folders:
+- are not part of the reviewed pipeline;
+- must never be written to, read from, or depended upon by any agent
+  (LEAD, IMPLEMENTER, REVIEWER, ADVISOR);
+- are versioned in git like the rest of `src/` — no special gitignore treatment.
+
+Since agents never read these folders, any durable conclusion from this
+exploration (a decision, a finding worth keeping) must be formalized
+separately — an ADR in `docs/adr/` or a write-up in `docs/research-reports/` —
+rather than left only inside a notebook.
