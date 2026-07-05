@@ -14,6 +14,10 @@
 - Functional over OOP.
 - Type hints required on every function signature.
 - Docstrings required (purpose, args, returns).
+- Never use sklearn `Pipeline` or `ColumnTransformer`. Preprocessing steps
+  are written as explicit, separate function calls instead — this keeps
+  every transformation visible and inspectable, rather than hidden behind
+  a Pipeline's fit/transform abstraction.
 
 ## 3. Imports
 - No wildcard imports.
@@ -21,9 +25,13 @@
 - No `sys.path` manipulation.
 
 ## 4. File formats
-- Parquet over CSV for tabular data.
-- Any artifact that other code depends on downstream (e.g. a selected
-  feature list) must be a `.py` module, not a notebook or a CSV.
+- Parquet for tabular data meant to be read by other code downstream
+  (anything under `data/`).
+- CSV is acceptable for small, human-inspectable diagnostic tables tied
+  to a single experiment run (via `src.lib.experiment_tracking.log_run`).
+- Trained models: never pickle directly. Prefer the model's own
+  `.save_model()` method when available (XGBoost, LightGBM, etc.),
+  falling back to `joblib` otherwise — see section 14.
 
 ## 5. Metrics
 - Primary metric: <TBD per project>
@@ -40,14 +48,19 @@
 ## 7. Reports & artifacts policy
 - `reports/` is fully gitignored, no per-file exceptions.
 - Any fitted artifact that downstream code must reproduce exactly — not
-  regenerate — lives in `src/`, version-controlled. Examples: a selected
-  feature list, a categorical encoding map fit on train. These are
-  contracts, not regenerable diagnostics, so they never go in `reports/`
-  or `data/`.
+  regenerate — lives in `src/`, version-controlled, as a `.py` module
+  (never a notebook or a CSV). Examples: a selected feature list, a
+  categorical encoding map fit on train. These are contracts, not
+  regenerable diagnostics, so they never go in `reports/` or `data/`.
 
 ## 8. Function signatures
-- Keyword-only arguments for any function with more than 2 parameters.
-- Max 4 arguments per function; refactor into a config object beyond that.
+General guideline, not a hard limit: prefer keyword-only arguments and
+fewer than 4 parameters for pure `lib/` functions (e.g. `src.lib.metrics`,
+`src.lib.feature_selection`). Orchestration/logging functions that
+legitimately bundle several related values (e.g.
+`src.lib.experiment_tracking.log_run`) are exempt from this — see
+`skills/function-conventions/` for the full rubric and worked examples
+(pending — not yet written).
 
 ## 9. Reproducibility
 - Fixed `random_state` across all splits, models, and stochastic steps.
@@ -55,9 +68,13 @@
 
 ## 10. Paths
 - No absolute paths anywhere in `src/`.
-- Repo installed in editable mode (`pip install -e .`) so `src` imports
-  resolve identically regardless of execution location.
-
+- No path to `data/` or `reports/` is ever written by hand as a string in
+  a script — import the location from `src.lib.paths` instead. If a
+  location isn't defined there yet, add it when the need arises, rather
+  than anticipating every possible path upfront.
+- `src` imports resolve identically regardless of execution location
+  because the repo is installed as a package via `uv sync` — see
+  section 16 (Packaging).
 
 ## 11. Analysis folders (`*/analysis/`)
 Any folder named `analysis` anywhere under `src/` is reserved for the project
@@ -76,9 +93,11 @@ rather than left only inside a notebook.
 ## 12. Config loading
 Model-specific config values override `global.yaml` when both define the
 same key. Any key not overridden by the model is inherited from
-`global.yaml`. Only `configs/local.yaml` is gitignored; the rest of
-`configs/` is versioned, since it represents reviewable project decisions,
-not machine-specific or regenerable data.
+`global.yaml`. `use_mlflow` is project-wide and defined only in
+`global.yaml` — model-specific files are not expected to override it.
+Only `configs/local.yaml` is gitignored; the rest of `configs/` is
+versioned, since it represents reviewable project decisions, not
+machine-specific or regenerable data.
 
 ## 13. Testing
 Tests are not required during model development (`etl/`, `models/`
@@ -89,3 +108,63 @@ Testing becomes mandatory once code enters the inference/production phase:
 any script under `src/inference/`, plus any `src/lib/` function that
 `inference/` code actually imports, must have a corresponding test in
 `tests/`, mirroring the same relative path.
+
+## 14. Model persistence
+- Never use pickle directly to save a model — it is fragile across
+  library/Python version changes and can silently fail to load after an
+  upgrade.
+- Prefer a model's own `.save_model()` method when it exposes one
+  (XGBoost, LightGBM, and others do), falling back to `joblib` otherwise.
+  No ML library is hardcoded as a dependency for this.
+- This logic lives inline in `src.lib.experiment_tracking._save_artifact`
+  today, since it is currently only needed there. If another script
+  (e.g. the final model's training script) also needs to persist a
+  model, decide then whether to reuse that helper or duplicate the
+  four-line check — do not extract a shared module preemptively.
+
+## 15. Experiment tracking
+- Toggled by a single project-wide `use_mlflow` flag in
+  `configs/global.yaml` (never per-model — see section 12).
+- All experiment logging goes through
+  `src.lib.experiment_tracking.log_run` — no script calls `mlflow.log_*`
+  or writes run files directly.
+- When `use_mlflow=True`: the tracking store lives at
+  `reports/models/model_<name>/mlruns/`.
+- When `use_mlflow=False`: writes to
+  `reports/models/model_<name>/manual_runs/<run_name>/` instead —
+  `params.json`, `metrics.json`, plus one file per artifact, with format
+  inferred from type (see section 14 for models).
+- Scope: `log_run` is only for small, disposable artifacts tied to one
+  experimental run. Any dataset meant to be read later by another script
+  (e.g. predictions, a preprocessed matrix) does not belong here — save it
+  as parquet under `src.lib.paths.model_data_dir(model_name)` instead.
+- `model_comparison.py` reads back via `mlflow.search_runs()` rather than
+  re-implementing comparison logic by hand.
+
+## 16. Packaging
+- Official install method: `uv sync` (installs dependencies, creates
+  `.venv/`, and installs the project itself in editable mode — no
+  separate `pip install -e .` step needed). Run `uv sync --extra dev` to
+  also include test-only dependencies.
+- `uv.lock` is versioned in git — it pins the exact resolved version of
+  every dependency (including transitive ones) so every clone gets an
+  identical environment. Regenerate it with `uv lock` after changing
+  `dependencies` or `optional-dependencies` in `pyproject.toml`.
+- `.venv/` is gitignored — never commit a virtual environment.
+- Any folder under `src/` that another module imports from using dotted
+  notation (`from src.x.y import z`) needs an empty `__init__.py` — add it
+  only when that import is actually written, not preemptively.
+- Runtime dependencies go in `[project.dependencies]`; test-only
+  dependencies (e.g. `pytest`) go in `[project.optional-dependencies]`
+  under a `dev` group.
+
+## 17. Git workflow
+- Commits (local): never automatic. Every commit — even local, before any
+  push — requires explicit confirmation from the project owner first.
+- Push: never automatic and never without explicit permission, every time.
+- Author identity: the project owner's own git identity, not a separate
+  "agent" identity — commits made by an agent are not distinguished in
+  git history from ones made manually.
+- Commit message format: free-form, no fixed convention (e.g. no
+  Conventional Commits prefix required). Keep messages short and
+  concise — optimize for fewer tokens, not for following a template.
