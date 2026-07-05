@@ -18,7 +18,6 @@ Example
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-
 import yaml
 
 
@@ -38,7 +37,6 @@ class ModelConfig:
     Model-specific YAML files are not expected to override it — it is the
     same for every model in the project.
     """
-
     random_state: int
     primary_metric: str
     secondary_metric: str
