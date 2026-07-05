@@ -70,3 +70,10 @@ Since agents never read these folders, any durable conclusion from this
 exploration (a decision, a finding worth keeping) must be formalized
 separately — an ADR in `docs/adr/` or a write-up in `docs/research-reports/` —
 rather than left only inside a notebook.
+
+## 12. Config loading
+Model-specific config values override `global.yaml` when both define the
+same key. Any key not overridden by the model is inherited from
+`global.yaml`. Only `configs/local.yaml` is gitignored; the rest of
+`configs/` is versioned, since it represents reviewable project decisions,
+not machine-specific or regenerable data.

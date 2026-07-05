@@ -1,0 +1,5 @@
+# configs/global.yaml
+random_state: 42
+#primary_metric: mae
+#secondary_metric: r2
+logging_level: INFO
