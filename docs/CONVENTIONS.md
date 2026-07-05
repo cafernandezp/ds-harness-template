@@ -39,9 +39,11 @@
 
 ## 7. Reports & artifacts policy
 - `reports/` is fully gitignored, no per-file exceptions.
-- Artifacts that are decisions consumed by downstream code (e.g. a
-  selected-features list) live in `src/`, version-controlled, never in
-  `reports/`.
+- Any fitted artifact that downstream code must reproduce exactly — not
+  regenerate — lives in `src/`, version-controlled. Examples: a selected
+  feature list, a categorical encoding map fit on train. These are
+  contracts, not regenerable diagnostics, so they never go in `reports/`
+  or `data/`.
 
 ## 8. Function signatures
 - Keyword-only arguments for any function with more than 2 parameters.
