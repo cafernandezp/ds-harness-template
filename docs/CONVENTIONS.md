@@ -79,3 +79,13 @@ same key. Any key not overridden by the model is inherited from
 `global.yaml`. Only `configs/local.yaml` is gitignored; the rest of
 `configs/` is versioned, since it represents reviewable project decisions,
 not machine-specific or regenerable data.
+
+## 13. Testing
+Tests are not required during model development (`etl/`, `models/`
+experiments/final_model). This phase is exploratory and code changes
+fast — the cost of maintaining tests outweighs the benefit here.
+
+Testing becomes mandatory once code enters the inference/production phase:
+any script under `src/inference/`, plus any `src/lib/` function that
+`inference/` code actually imports, must have a corresponding test in
+`tests/`, mirroring the same relative path.
