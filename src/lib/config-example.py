@@ -21,8 +21,6 @@ from typing import Any
 
 import yaml
 
-CONFIGS_DIR = Path("configs")
-
 
 @dataclass
 class ModelConfig:
@@ -34,13 +32,21 @@ class ModelConfig:
     decided yet. Once that choice is final, promote it into its own typed
     dataclass here and update `load_config` accordingly. Every other field
     below reflects something already confirmed (fixed `random_state` in
-    Standards; primary/secondary metric in CONVENTIONS.md).
+    Standards; primary/secondary metric and `use_mlflow` in CONVENTIONS.md).
+
+    `use_mlflow` is a project-wide switch, defined only in `global.yaml`.
+    Model-specific YAML files are not expected to override it — it is the
+    same for every model in the project.
     """
 
     random_state: int
     primary_metric: str
     secondary_metric: str
+    use_mlflow: bool
     feature_selection: dict[str, Any] = field(default_factory=dict)
+
+
+CONFIGS_DIR = Path("configs")
 
 
 def load_config(model_name: str) -> ModelConfig:
@@ -83,6 +89,7 @@ def load_config(model_name: str) -> ModelConfig:
         random_state=merged["random_state"],
         primary_metric=merged["primary_metric"],
         secondary_metric=merged["secondary_metric"],
+        use_mlflow=merged["use_mlflow"],
         feature_selection=merged.get("feature_selection", {}),
     )
 
