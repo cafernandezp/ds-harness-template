@@ -80,3 +80,15 @@ LEAD resolves any conflict before the session proceeds.
 1. LEAD marks completed sub-tasks in `current.md`.
 2. LEAD updates feature `status` in `docs/memory/backlog.json`.
 3. LEAD appends a session summary to `docs/memory/progress/history.md`.
+
+
+## Engineering Principles
+
+Every agent that writes or reviews code follows these four rules:
+
+| Principle             | Rule                                                                                                                                                     |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Think Before Coding   | State assumptions explicitly. If a request is ambiguous, ask instead of guessing.                                                                        |
+| Simplicity First      | Write the minimum code that solves the request. No speculative features, no premature abstractions.                                                      |
+| Surgical Changes      | Touch only what the task requires. Read adjacent exports/callers before writing next to them. Don't refactor unrelated working code.                     |
+| Goal-Driven Execution | Define verifiable success criteria before starting a sub-task. If a sub-task fails, stop and report — don't build the next one on top of a broken state. |
