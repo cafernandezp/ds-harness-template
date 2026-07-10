@@ -20,7 +20,7 @@
 
 | Agent       | Role                                                                             | Instructions            |
 | ----------- | -------------------------------------------------------------------------------- | ----------------------- |
-| LEAD        | Orchestrates sessions, owns all state, writes ADRs and plans                     | `agents/leader.md`      |
+| LEAD        | Orchestrates sessions, owns all state, writes ADRs and plans                     | `agents/lead.md`      |
 | IMPLEMENTER | Writes and runs code; produces artifacts                                         | `agents/implementer.md` |
 | REVIEWER    | Quality gate: leakage, metrics, reproducibility, conventions                     | `agents/reviewer.md`    |
 | ADVISOR     | Senior DS/ML consultant; answers questions and writes research reports on demand | `agents/advisor.md`     |
