@@ -26,6 +26,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pre-commit>=3.7",
     "pytest>=8.2",
     "ruff>=0.6",
 ]
@@ -36,4 +37,36 @@ experiments = [
 notebooks = [
     "ipykernel>=6.29",
     "jupyter>=1.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["playground", "*/analysis/*"]
+
+[tool.ruff.lint]
+# E,F = pycodestyle+pyflakes (defaults); I = isort; UP = pyupgrade;
+# B = bugbear (mutable defaults, etc.); SIM = flake8-simplify;
+# RUF = ruff-specific. Conservative pick; expand as the code grows.
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = [
+    "E501",   # line length — the formatter handles this
+    "B008",   # function calls in defaults — pandas/sklearn idiom
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B", "SIM"]  # test bodies tolerate looser patterns
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = [
+    "error",
+    # Suppress noise from ecosystem libraries we don't own.
+    "ignore::DeprecationWarning:mlflow.*",
+    "ignore::DeprecationWarning:sklearn.*",
 ]

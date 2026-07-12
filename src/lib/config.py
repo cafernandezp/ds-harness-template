@@ -17,6 +17,7 @@ Example
 
 from dataclasses import dataclass, field
 from typing import Any
+
 import yaml
 
 from src.lib.paths import CONFIGS_DIR
@@ -38,6 +39,7 @@ class ModelConfig:
     Model-specific YAML files are not expected to override it — it is the
     same for every model in the project.
     """
+
     random_state: int
     primary_metric: str
     secondary_metric: str
@@ -73,10 +75,10 @@ def load_config(model_name: str) -> ModelConfig:
     global_path = CONFIGS_DIR / "global.yaml"
     model_path = CONFIGS_DIR / "models" / f"{model_name}.yaml"
 
-    with open(global_path, "r") as f:
+    with open(global_path) as f:
         global_cfg = yaml.safe_load(f)
 
-    with open(model_path, "r") as f:
+    with open(model_path) as f:
         model_cfg = yaml.safe_load(f)
 
     merged = {**global_cfg, **model_cfg}
