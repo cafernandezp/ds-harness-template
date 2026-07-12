@@ -59,7 +59,6 @@
 | `docs/CONVENTIONS.md`    | IMPLEMENTER, REVIEWER                        | Code style, naming, metrics, import rules, file formats                 |
 | `docs/adr/`              | All agents                                   | Binding project decisions — consult before reopening any decision       |
 | `docs/research-reports/` | ADVISOR, LEAD                                | Prior technical explorations — consult before writing on the same topic |
-| `CHECKPOINTS.md`         | REVIEWER, LEAD                               | Verifiable "done" criteria per project phase                            |
 
 ---
 
