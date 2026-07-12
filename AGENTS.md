@@ -6,6 +6,7 @@
 ---
 
 ## Project Identity
+**This is a repository template for harness engineering in data science projects**
 
 - **Name:** <!-- e.g. Judicial Progress Score -->
 - **Type:** <!-- regression / binary classification / multiclass -->
