@@ -44,14 +44,14 @@
 
 **Key decisions:**
 - Three-agent harness: LEAD / IMPLEMENTER / REVIEWER
-- State tracked in `docs/code-ia/progress/`
-- Feature backlog in `docs/code-ia/backlog.md`
+- State tracked in `docs/memory/progress/`
+- Feature backlog in `docs/memory/backlog.md`
 
 **Outcomes / artifacts produced:**
 - `AGENTS.md` — agent definitions and workflow
-- `docs/code-ia/progress/current.md` — task tracker template
-- `docs/code-ia/progress/history.md` — this file
-- `docs/code-ia/backlog.md` — feature backlog
+- `docs/memory/progress/current.md` — task tracker template
+- `docs/memory/progress/history.md` — this file
+- `docs/memory/backlog.md` — feature backlog
 
 **Carry-forward to next session:**
 - Fill in first real task in `current.md`

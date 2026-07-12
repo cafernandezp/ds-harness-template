@@ -6,8 +6,8 @@
 > approved (see `docs/memory/plans/`). This is not a wishlist and not a pre-loaded
 > generic DS pipeline.
 > **Concurrency rule:** only one feature may be `in_progress` at a time.
-> **Note:** this file starts empty in a new project. The row below is illustrative —
-> delete it when you start your real project.
+
+> **Note:** See `docs/memory/examples/backlog.md` for an example of a populated backlog.
 
 ## Allowed `status` values
 `todo` · `in_progress` · `review` · `done` · `blocked` · `cancelled`
@@ -16,7 +16,6 @@
 
 | ID | Title | Status | Depends on | Plan | ADR |
 |---|---|---|---|---|---|
-| FEAT-001 | Feature selection pipeline (filter + VIF) | in_progress | — | PLAN-001 | adr-2026-06-15-vif-threshold |
 
 **Column notes:**
 - `ID`: sequential, zero-padded, never reused (a cancelled FEAT-002 leaves a gap; the next new feature is still FEAT-003).
