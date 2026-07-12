@@ -73,7 +73,7 @@ Inside each model:
 - `experiments/multivariate/` — multi-feature experiments.
 - `experiments/preprocessing/` — preprocessing candidates. Written as
   explicit function calls, never as a sklearn `Pipeline` or
-  `ColumnTransformer` (see `CONVENTIONS.md` §2).
+  `ColumnTransformer` (see `CONVENTIONS.md`).
 - `experiments/model_comparison.py` — reads back experiment runs and
   ranks them. Consumes tracking output rather than re-running models.
 - `final_model/train.py` and `final_model/evals.py` — the chosen model's
@@ -85,7 +85,7 @@ Inside each model:
 Production-facing code. Currently `inference/perimeter/`, mirroring the
 etl stage that defines who gets scored. Anything here — plus any
 `src/lib/` function it imports — is subject to mandatory tests under a
-`tests/` mirror (see `CONVENTIONS.md` §13).
+`tests/` mirror (see `CONVENTIONS.md`).
 
 ### `configs/`
 
