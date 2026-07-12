@@ -1,5 +1,8 @@
 # configs/global.yaml
+# Project-wide defaults. Per-model files in configs/models/<name>.yaml
+# override individual keys; unset keys are inherited from here.
 random_state: 42
-#primary_metric: mae
-#secondary_metric: r2
+primary_metric: mae       # replace after primary-metric ADR
+secondary_metric: r2      # replace after secondary-metric ADR
+use_mlflow: false         # project-wide; never overridden per-model
 logging_level: INFO

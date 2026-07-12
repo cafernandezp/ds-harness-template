@@ -13,7 +13,12 @@ instead — see that module's docstring for the distinction.
 
 from pathlib import Path
 
-DATA_DIR = Path("data")
+# Anchor every path to the repo root so scripts resolve identically
+# regardless of where they were launched from. This file lives at
+# src/lib/paths.py, so parents[2] is the repo root.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+DATA_DIR = REPO_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 
 ETL_DIR = DATA_DIR / "etl"
@@ -22,7 +27,8 @@ ETL_FEATURES_DIR = ETL_DIR / "features"
 ETL_TARGET_DIR = ETL_DIR / "target"
 ETL_TRAIN_TEST_DIR = ETL_DIR / "train_test"
 
-REPORTS_DIR = Path("reports")
+REPORTS_DIR = REPO_ROOT / "reports"
+CONFIGS_DIR = REPO_ROOT / "configs"
 
 
 def model_data_dir(model_name: str) -> Path:

@@ -27,12 +27,14 @@ Requires: mlflow, pandas, joblib (pip install mlflow pandas joblib)
 """
 
 import json
+import tempfile
 from pathlib import Path
 from typing import Any
 
 import joblib
-import mlflow
 import pandas as pd
+
+from src.lib.paths import model_reports_dir
 
 
 def log_run(
@@ -89,7 +91,13 @@ def _log_with_mlflow(
     metrics: dict[str, float],
     artifacts: dict[str, Any],
 ) -> None:
-    mlflow.set_tracking_uri(f"file:./reports/models/{model_name}/mlruns")
+    # Imported lazily so the module works when use_mlflow=False and
+    # mlflow isn't installed.
+    import mlflow
+
+    tracking_dir = model_reports_dir(model_name) / "mlruns"
+    tracking_dir.mkdir(parents=True, exist_ok=True)
+    mlflow.set_tracking_uri(f"file:{tracking_dir}")
     mlflow.set_experiment(model_name)
 
     with mlflow.start_run(run_name=run_name):
@@ -97,9 +105,10 @@ def _log_with_mlflow(
             mlflow.log_param(key, value)
         for key, value in metrics.items():
             mlflow.log_metric(key, value)
-        for name, obj in artifacts.items():
-            tmp_path = _save_artifact(Path("."), name, obj)
-            mlflow.log_artifact(str(tmp_path))
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, obj in artifacts.items():
+                tmp_path = _save_artifact(Path(tmp), name, obj)
+                mlflow.log_artifact(str(tmp_path))
 
 
 def _log_manually(
@@ -109,7 +118,7 @@ def _log_manually(
     metrics: dict[str, float],
     artifacts: dict[str, Any],
 ) -> None:
-    run_dir = Path(f"reports/models/{model_name}/manual_runs/{run_name}")
+    run_dir = model_reports_dir(model_name) / "manual_runs" / run_name
     run_dir.mkdir(parents=True, exist_ok=True)
 
     (run_dir / "params.json").write_text(json.dumps(params, indent=2))

@@ -1,16 +1,19 @@
-.PHONY: install-init install-clean install-reset
+.PHONY: install install-dev install-all install-clean install-reset
 
-install-init:
-	uv init --python 3.12
-	uv add "numba>=0.60" "llvmlite>=0.43" pandas numpy scikit-learn xgboost lightgbm shap scipy statsmodels joblib seaborn matplotlib click fastapi torch
-	uv add --dev pytest ruff
-	uv add --group notebooks ipykernel jupyter
-	uv add --group experiments mlflow optuna
+# Standard install: reads pyproject.toml + uv.lock, creates .venv,
+# installs the project editable. Idempotent.
+install:
+	uv sync
+
+# With dev tools (pytest, ruff).
+install-dev:
+	uv sync --group dev
+
+# Everything: dev + notebooks + experiments.
+install-all:
+	uv sync --all-groups
 
 install-clean:
 	rm -rf .venv
-	rm -f pyproject.toml
-	rm -f uv.lock
-	rm -f .python-version
 
-install-reset: install-clean install-init
+install-reset: install-clean install

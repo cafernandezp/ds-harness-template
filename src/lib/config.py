@@ -16,9 +16,10 @@ Example
 """
 
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 import yaml
+
+from src.lib.paths import CONFIGS_DIR
 
 
 @dataclass
@@ -42,9 +43,6 @@ class ModelConfig:
     secondary_metric: str
     use_mlflow: bool
     feature_selection: dict[str, Any] = field(default_factory=dict)
-
-
-CONFIGS_DIR = Path("configs")
 
 
 def load_config(model_name: str) -> ModelConfig:
