@@ -20,7 +20,7 @@
 
 | Agent       | Role                                                                             | Instructions            |
 | ----------- | -------------------------------------------------------------------------------- | ----------------------- |
-| LEAD        | Orchestrates sessions, owns all state, writes ADRs and plans                     | `agents/lead.md`      |
+| LEAD        | Orchestrates sessions, owns all state, writes ADRs and plans                     | `agents/lead.md`        |
 | IMPLEMENTER | Writes and runs code; produces artifacts                                         | `agents/implementer.md` |
 | REVIEWER    | Quality gate: leakage, metrics, reproducibility, conventions                     | `agents/reviewer.md`    |
 | ADVISOR     | Senior DS/ML consultant; answers questions and writes research reports on demand | `agents/advisor.md`     |
@@ -43,7 +43,7 @@
 | ------------------------------------------ | ------------------------------ | --------------------------------------------------------- |
 | `docs/memory/progress/current.md`          | LEAD (R/W)                     | Active session: feature in progress, sub-tasks, blockers  |
 | `docs/memory/progress/history.md`          | LEAD (append-only)             | Session log — never edited, only appended                 |
-| `docs/memory/backlog.json`                 | LEAD (R/W)                     | Feature backlog with status, priority, plan and ADR links |
+| `docs/memory/backlog.md`                   | LEAD (R/W)                     | Feature backlog with status, priority, plan and ADR links |
 | `docs/memory/plans/`                       | LEAD (R/W)                     | Exec plans — one `.md` file per plan                      |
 | `docs/memory/progress/impl_<feature>.md`   | IMPLEMENTER (W) / REVIEWER (R) | Implementation trace per feature                          |
 | `docs/memory/progress/review_<feature>.md` | REVIEWER (W) / LEAD (R)        | Review trace per feature                                  |
@@ -64,7 +64,7 @@
 
 ## One-Feature-at-a-Time Rule
 
-Only one feature may have `status: "in_progress"` in `docs/memory/backlog.json` at any time.
+Only one feature may have `status: "in_progress"` in `docs/memory/backlog.md` at any time.
 LEAD resolves any conflict before the session proceeds.
 
 ---
@@ -72,13 +72,13 @@ LEAD resolves any conflict before the session proceeds.
 ## Session Protocol
 
 **Start:**
-1. LEAD reads `docs/memory/progress/current.md` + `docs/memory/backlog.json`.
+1. LEAD reads `docs/memory/progress/current.md` + `docs/memory/backlog.md`.
 2. LEAD reads `docs/ARCHITECTURE.md` if the active feature touches the pipeline.
 3. LEAD decomposes the active feature into sub-tasks and updates `current.md`.
 
 **End:**
 1. LEAD marks completed sub-tasks in `current.md`.
-2. LEAD updates feature `status` in `docs/memory/backlog.json`.
+2. LEAD updates feature `status` in `docs/memory/backlog.md`.
 3. LEAD appends a session summary to `docs/memory/progress/history.md`.
 
 

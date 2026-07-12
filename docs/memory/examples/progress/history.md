@@ -40,22 +40,22 @@
 ## Session #001 — 2026-06-17
 
 **Tasks attempted:** project setup
-**Tasks completed:** AGENTS.md, current.md, history.md, backlog.json ✅
+**Tasks completed:** AGENTS.md, current.md, history.md, backlog.md ✅
 
 **Key decisions:**
 - Three-agent harness: LEAD / IMPLEMENTER / REVIEWER
 - State tracked in `docs/code-ia/progress/`
-- Feature backlog in `docs/code-ia/backlog.json`
+- Feature backlog in `docs/code-ia/backlog.md`
 
 **Outcomes / artifacts produced:**
 - `AGENTS.md` — agent definitions and workflow
 - `docs/code-ia/progress/current.md` — task tracker template
 - `docs/code-ia/progress/history.md` — this file
-- `docs/code-ia/backlog.json` — feature backlog
+- `docs/code-ia/backlog.md` — feature backlog
 
 **Carry-forward to next session:**
 - Fill in first real task in `current.md`
-- Populate `backlog.json` with project-specific features
+- Populate `backlog.md` with project-specific features
 
 **Notes:**
 - Harness is project-agnostic; adapt column names and paths to the specific dataset.
