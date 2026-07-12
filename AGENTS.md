@@ -93,3 +93,4 @@ Every agent that writes or reviews code follows these four rules:
 | Simplicity First      | Write the minimum code that solves the request. No speculative features, no premature abstractions.                                                      |
 | Surgical Changes      | Touch only what the task requires. Read adjacent exports/callers before writing next to them. Don't refactor unrelated working code.                     |
 | Goal-Driven Execution | Define verifiable success criteria before starting a sub-task. If a sub-task fails, stop and report — don't build the next one on top of a broken state. |
+| Git Safety            | Never commit or push without explicit owner confirmation, every time. Never bypass hooks (`--no-verify`).                                                |

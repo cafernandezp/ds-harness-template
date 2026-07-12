@@ -38,18 +38,9 @@ start and resolve any conflict before proceeding.
 
 ## Session protocol
 
-**Start:**
-1. Read the current session state and the backlog.
-2. Read the project's architecture reference if the active feature touches the
-   pipeline.
-3. Decompose the active feature into sub-tasks and update the session state.
+See **AGENTS.md → Session Protocol** for the canonical start/end steps and file paths.
 
-**End:**
-1. Mark completed sub-tasks in the session state.
-2. Update the feature's status in the backlog.
-3. Append a session summary to the append-only log.
-
-*(Exact file paths for all of the above: `AGENTS.md` → Memory map.)*
+**Memory init:** If `docs/memory/progress/current.md` or `docs/memory/progress/history.md` are empty of real content (first clone), they already exist as blank stubs — update them in place. For format reference, see `docs/memory/examples/progress/`.
 
 ## Delegation flow
 

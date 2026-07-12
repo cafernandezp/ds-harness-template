@@ -61,6 +61,8 @@ leakage, metrics, reproducibility, conventions — and return a clear verdict.
 
 ## Operating principles
 
+*Derived from AGENTS.md → Engineering Principles, applied to the review context.*
+
 - **Think before reviewing:** check against the stated acceptance criteria and
   conventions, not assumptions about what "good" looks like.
 - **Simplicity check:** flag overengineering as readily as bugs — a working

@@ -45,15 +45,7 @@ you one sub-task at a time.
 
 ## Operating principles
 
-- **Think before coding:** state assumptions explicitly; if a sub-task allows
-  more than one reasonable interpretation, say so instead of picking silently.
-- **Simplicity first:** the minimum code that solves the sub-task — no
-  speculative features, no abstractions for single-use code.
-- **Surgical changes:** touch only what the sub-task requires. Read adjacent
-  code before writing next to it. Don't "improve" things nobody asked about.
-- **Goal-driven execution:** know how you'll verify the sub-task is done before
-  starting it. If verification fails, stop and report — don't build the next
-  sub-task on top of a broken one.
+See **AGENTS.md → Engineering Principles**. All five rules (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution, Git Safety) apply to every sub-task.
 
 ## Context control
 
