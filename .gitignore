@@ -11,7 +11,7 @@ __pycache__/
 
 # Data and reports — fully regenerable by code, per docs/CONVENTIONS.md
 data/
-reports/
+#reports/
 
 # Local, machine-specific config (paths/credentials) — never shared
 configs/local.yaml
