@@ -109,7 +109,7 @@ data/                  # gitignored: raw + intermediate parquets
 | Fitted artifact downstream must reproduce exactly | `.py` module under `src/`, never a CSV in `reports/` |
 | Anything regenerable by rerunning the pipeline | `reports/` or `data/` (both gitignored) |
 | Owner's personal scratch exploration | `src/<stage>/analysis/` — invisible to agents |
-| Free-form scratch outside the pipeline | `playground/` |
+| Free-form scratch, temp code, or notes outside the pipeline | `playground/` — invisible to agents |
 
 ## Key invariants (don't break these)
 

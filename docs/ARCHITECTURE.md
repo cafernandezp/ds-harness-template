@@ -118,7 +118,8 @@ to operate on `src/` and `docs/`.
 
 ### `playground/`
 
-Free-form scratch space outside the pipeline. Never imported from `src/`.
+Free-form scratch space outside the pipeline. Owner-only — see the
+"invisible to agents" invariant below. Never imported from `src/`.
 
 ## Architectural invariants
 
@@ -131,11 +132,14 @@ Invariants are load-bearing rules that hold repo-wide. Most are absences
   moves into `src/lib/`.
 - **`src/lib/` has no upward dependencies.** No module in `lib/` imports
   from `etl/`, `models/`, or `inference/`. `lib/` is a leaf.
-- **`analysis/` folders are invisible to agents.** Any folder named
-  `analysis` under `src/` belongs to the human owner. Agents (LEAD,
-  IMPLEMENTER, REVIEWER, ADVISOR) never read from, write to, or depend on
-  it. Findings from `analysis/` become durable only via an ADR or a
-  research report — never by another script importing from it.
+- **`analysis/` folders and `playground/` are invisible to agents.** Any
+  folder named `analysis` under `src/`, plus the top-level `playground/`,
+  belong to the human owner. Agents (LEAD, IMPLEMENTER, REVIEWER, ADVISOR)
+  never read from, write to, or depend on either, unless the owner
+  explicitly says otherwise for a specific case. Findings from either
+  become durable only via an ADR or a research report — never by another
+  script importing from them. See `docs/CONVENTIONS.md` §11 for the full
+  rule.
 - **Transformers fit on train only.** No preprocessing, encoding, or
   feature selection ever calls `.fit` on validation or test data. Enforced
   by review, not by types.

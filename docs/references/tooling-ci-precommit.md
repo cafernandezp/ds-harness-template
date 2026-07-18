@@ -1,120 +1,121 @@
-# Tooling: pre-commit y CI
+# Tooling: pre-commit and CI
 
-> Nota personal para releer cuando el proyecto entre en fase de producción
-> y toque decidir si activar CI. Fase actual: desarrollo temprano — CI
-> retirado del template a propósito; pre-commit sigue activo.
+> Personal note to re-read once the project enters production phase and it's
+> time to decide whether to enable CI. Current phase: early development — CI
+> deliberately removed from the template; pre-commit stays active.
 
 ---
 
 ## `.pre-commit-config.yaml`
 
-### Qué es
+### What it is
 
-Config del framework [pre-commit](https://pre-commit.com/) — orquesta
-hooks de Git. Al hacer `git commit`, Git ejecuta hooks locales antes de
-crear el commit. Si un hook falla, el commit no ocurre.
+Config for the [pre-commit](https://pre-commit.com/) framework — orchestrates
+Git hooks. On `git commit`, Git runs local hooks before creating the commit.
+If a hook fails, the commit doesn't happen.
 
-### Cómo funciona
+### How it works
 
-1. `uv run pre-commit install` — una vez por clone. Escribe
-   `.git/hooks/pre-commit` apuntando al framework.
-2. Cada `git commit` → framework lee el yaml → corre los hooks listados
-   sobre los archivos staged.
-3. Hooks que **modifican** (ruff `--fix`, `ruff-format`,
-   `end-of-file-fixer`) reescriben el archivo. El commit aborta con
-   "files were modified" → re-stagear y recommitear ya limpio.
-4. Hooks que **solo validan** (`check-yaml`, `check-toml`) fallan si el
-   archivo está mal.
+1. `uv run pre-commit install` — once per clone. Writes
+   `.git/hooks/pre-commit` pointing at the framework.
+2. Every `git commit` → framework reads the yaml → runs the listed hooks
+   over staged files.
+3. Hooks that **modify** (ruff `--fix`, `ruff-format`, `end-of-file-fixer`)
+   rewrite the file. The commit aborts with "files were modified" → re-stage
+   and re-commit once clean.
+4. Hooks that **only validate** (`check-yaml`, `check-toml`) fail if the file
+   is malformed.
 
-### Cuándo se usa
+### When it runs
 
-- Cada commit local, automático.
-- Manual global: `uv run pre-commit run --all-files` (útil primera vez
-  o tras cambiar config).
+- Every local commit, automatically.
+- Manual, repo-wide: `uv run pre-commit run --all-files` (useful the first
+  time or after changing config).
 
-### Para qué sirve en este template
+### What it's for in this template
 
-- Rechaza commits con trailing whitespace, EOF sin `\n`, yaml/toml mal
-  formados, files >1MB (previene subir data por accidente).
-- Ruff format + `--fix` uniformizan estilo antes de que el diff llegue
-  al remoto → PRs limpios, revisor no discute formato.
+- Rejects commits with trailing whitespace, missing final newline,
+  malformed yaml/toml, files >1MB (prevents accidentally committing data).
+- Ruff format + `--fix` normalize style before the diff reaches the
+  remote → clean PRs, reviewer doesn't have to argue about formatting.
 
-### Alternativa si no lo querés
+### Alternative if you don't want it
 
-Borrar el file. Se pierde el autofix en commit — ruff/format solo
-corren cuando los llames a mano o en CI.
+Delete the file. You lose commit-time autofix — ruff/format only run when
+called by hand or in CI.
 
 ---
 
 ## `.github/workflows/ci.yml`
 
-### Qué es
+### What it is
 
-GitHub Actions workflow. Cada push/PR, GitHub levanta un runner Linux,
-ejecuta los steps del yaml. Verde ✅ / rojo ❌ en el PR.
+A GitHub Actions workflow. On every push/PR, GitHub spins up a Linux
+runner and executes the steps in the yaml. Green ✅ / red ❌ on the PR.
 
-### Qué haría este en concreto
+### What this one would specifically do
 
-1. Checkout del repo.
-2. Instala `uv` con caché de dependencies.
+1. Checkout the repo.
+2. Install `uv` with dependency caching.
 3. Python 3.12.
 4. `uv sync --group dev`.
 5. `ruff check .` — lint.
-6. `ruff format --check .` — verifica formato sin modificar.
-7. `pytest` (con shim que tolera "no tests collected" mientras el
-   template no traiga tests).
+6. `ruff format --check .` — verifies formatting without modifying.
+7. `pytest` (with a shim that tolerates "no tests collected" while the
+   template ships without tests).
 
-### ¿Es necesario en fase de desarrollo?
+### Is it necessary during development phase?
 
-Depende del modo de trabajo:
+Depends on the working mode:
 
-| Escenario | CI aporta |
+| Scenario | CI adds |
 |---|---|
-| Solo tú, un branch, sin PRs, iteración rápida en notebooks | Poco. Pre-commit local cubre el 90%. |
-| Multi-agente escribiendo código (IMPLEMENTER, LEAD haciendo quick-fixes) | Sí — red de seguridad contra agente que salta pre-commit o commitea sin instalarlo. |
-| PRs, revisor humano, o repos que otros van a clonar | Sí — señal objetiva antes del merge. |
-| Template público / que otros forkean | Sí — demuestra que arranca en máquina limpia. |
+| Just you, one branch, no PRs, fast iteration in notebooks | Little. Local pre-commit covers 90%. |
+| Multi-agent writing code (IMPLEMENTER, LEAD doing quick-fixes) | Yes — safety net against an agent skipping pre-commit or committing without it installed. |
+| PRs, human reviewer, or repos others will clone | Yes — objective signal before merge. |
+| Public template / one others fork | Yes — proves it boots on a clean machine. |
 
-### Argumentos contra CI en desarrollo temprano
+### Arguments against CI in early development
 
-- Feedback loop lento (minutos vs. segundos de pre-commit).
-- Requiere cuenta GitHub Actions con minutos disponibles.
-- En un proyecto DS puro-experimentación, ruff+pytest en CI no atrapa
-  lo importante (leakage, métricas mal calculadas — eso lo hace
-  REVIEWER, no CI).
+- Slower feedback loop (minutes vs. seconds for pre-commit).
+- Requires a GitHub Actions account with available minutes.
+- In a pure-experimentation DS project, ruff+pytest in CI doesn't catch
+  what actually matters (leakage, miscalculated metrics — that's
+  REVIEWER's job, not CI's).
 
-### Argumentos a favor incluso en desarrollo
+### Arguments for it even in development
 
-- El day-1 del template es cuando más barato es agregarlo. Agregarlo
-  después = riesgo de que nunca ocurra.
-- Los agentes pueden `--no-verify` o commitear sin pre-commit
-  installed. CI es el enforcement real.
-- Sirve como documentación ejecutable: "así se levanta el repo en
-  máquina limpia".
+- Day-1 of the template is the cheapest time to add it. Adding it later
+  risks it never happening.
+- Agents can `--no-verify` or commit without pre-commit installed. CI is
+  the real enforcement.
+- Serves as executable documentation: "this is how the repo boots on a
+  clean machine."
 
-### Recomendación pragmática
+### Pragmatic recommendation
 
-Dejarlo. Si molesta el ruido, comentar el trigger de `push` y dejar
-solo `pull_request` — así solo corre cuando abras PR, cero costo en
-commits al branch de trabajo.
-
----
-
-## Cuándo revisar esto
-
-Activar CI cuando ocurra cualquiera de:
-
-- Primer código bajo `src/inference/` (producción → tests obligatorios
-  por CONVENTIONS §13, y sin CI no hay enforcement remoto).
-- Segunda persona colabora en el repo.
-- Se abre el primer PR real (no commits directos a main).
-- El proyecto se hace público / se comparte con stakeholders externos.
+Keep it. If the noise is annoying, comment out the `push` trigger and
+keep only `pull_request` — that way it only runs when you open a PR, zero
+cost on commits to the working branch.
 
 ---
 
-## Contenido del `ci.yml` retirado (para restaurar)
+## When to revisit this
 
-Guardar en `.github/workflows/ci.yml`:
+Turn CI back on when any of these happen:
+
+- First code lands under `src/inference/` (production → tests become
+  mandatory per CONVENTIONS §13, and without CI there's no remote
+  enforcement).
+- A second person starts collaborating on the repo.
+- The first real PR is opened (no more direct commits to main).
+- The project goes public / is shared with external stakeholders.
+
+---
+
+## Retired `ci.yml` content (to restore)
+
+Save as `.github/workflows/ci.yml`:
 
 ```yaml
 name: ci
@@ -152,12 +153,12 @@ jobs:
         run: uv run ruff format --check .
 
       - name: Pytest
-        # `|| code=5` trata "no tests collected" como éxito — el template
-        # arranca sin tests. Quitar este fallback cuando ya existan tests.
+        # `|| code=5` treats "no tests collected" as success — the template
+        # ships without tests. Remove this fallback once tests exist.
         run: |
           uv run pytest || code=$?
           if [ "${code:-0}" = "5" ]; then exit 0; else exit ${code:-0}; fi
 ```
 
-Antes de restaurar: revisar versiones de las actions (`checkout@v4`,
-`setup-uv@v3`) — estarán desactualizadas para entonces.
+Before restoring: check the action versions (`checkout@v4`, `setup-uv@v3`)
+— they'll be outdated by then.

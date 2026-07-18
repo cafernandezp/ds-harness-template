@@ -75,19 +75,26 @@ legitimately bundle several related values (e.g.
   because the repo is installed as a package via `uv sync` — see
   section 16 (Packaging).
 
-## 11. Analysis folders (`*/analysis/`)
-Any folder named `analysis` anywhere under `src/` is reserved for the project
-owner's personal, manual, ad hoc exploration (typically scratch notebooks).
-These folders:
-- are not part of the reviewed pipeline;
-- must never be written to, read from, or depended upon by any agent
-  (LEAD, IMPLEMENTER, REVIEWER, ADVISOR);
-- are versioned in git like the rest of `src/` — no special gitignore treatment.
+## 11. Owner-only spaces (`*/analysis/` and `playground/`)
+Two kinds of folder are reserved for the project owner's personal, manual
+work and are invisible to every agent (LEAD, IMPLEMENTER, REVIEWER, ADVISOR)
+by default:
+- any folder named `analysis` anywhere under `src/` (typically scratch
+  notebooks, tied to a specific pipeline stage);
+- the top-level `playground/` — free-form scratch, temporary code, and notes
+  outside the pipeline entirely.
 
-Since agents never read these folders, any durable conclusion from this
-exploration (a decision, a finding worth keeping) must be formalized
-separately — an ADR in `docs/adr/` or a write-up in `docs/research-reports/` —
-rather than left only inside a notebook.
+Both:
+- are not part of the reviewed pipeline;
+- must never be written to, read from, or depended upon by any agent, unless
+  the project owner explicitly says otherwise for a specific case;
+- `analysis/` folders are versioned in git like the rest of `src/` — no
+  special gitignore treatment.
+
+Since agents never read these folders by default, any durable conclusion
+from this exploration (a decision, a finding worth keeping) must be
+formalized separately — an ADR in `docs/adr/` or a write-up in
+`docs/research-reports/` — rather than left only inside a notebook.
 
 ## 12. Config loading
 Model-specific config values override `global.yaml` when both define the
