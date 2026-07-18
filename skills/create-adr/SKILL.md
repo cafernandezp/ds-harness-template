@@ -44,8 +44,8 @@ documented. Never mix the two in the same file.
 - **Language:** always English, regardless of the language the user writes in.
 - **Length:** complete but concise. Each section gets what it needs — no padding,
   no repetition of the title in prose.
-- **Deliver:** write the file → call `present_files` → add a one-paragraph chat
-  summary in the user's language. Do not dump the full ADR in chat.
+- **Deliver:** write the file, then add a one-paragraph chat summary in
+  English. Do not dump the full ADR in chat.
 
 ---
 
@@ -190,18 +190,17 @@ related_features: []
 - [ ] Consequences split into Positive and Negative.
 - [ ] Advice contains at least one "when to revisit" bullet.
 - [ ] File saved to `docs/adr/adr-YYYY-MM-DD-<slug>.md`.
-- [ ] Chat summary written in the user's language (not English).
+- [ ] Chat summary written in English.
 
 ---
 
 ## Example trigger → action
 
-**User says:** "Crea un ADR sobre la regla 1-SE conservadora para el backward selection."
+**User says:** "Create an ADR about the conservative 1-SE rule for backward selection."
 
 **Agent action:**
 1. Reads any relevant research report in `docs/research-reports/` on the topic.
 2. Builds the ADR with the six sections, filling the Decision from the project context.
 3. Saves to `docs/adr/adr-<today>-backward-selection-1se.md`.
-4. Calls `present_files`.
-5. Writes a one-paragraph summary in Spanish confirming what was decided and where the file lives.
+4. Writes a one-paragraph summary in English confirming what was decided and where the file lives.
 

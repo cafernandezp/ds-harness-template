@@ -27,11 +27,11 @@ force a report.
  
 ## Output contract
  
-- Deliver a single **`.md` file** written to the outputs directory, then present it. Do not dump the
-  full report into the chat; give a short summary + the file.
+- Deliver a single **`.md` file** written to `docs/research-reports/`, then present it. Do not dump
+  the full report into the chat; give a short summary + the file.
 - **Filename MUST be prefixed `rr-`** (e.g. `rr-encoding-strategies.md`).
-- **The report is ALWAYS written in English**, regardless of the language the user writes in. The
-  chat summary may follow the user's language, but the `.md` deliverable itself is English.
+- **Both the report and the chat summary are ALWAYS written in English**, regardless of the
+  language the user writes in.
 - Style: **professional, direct, minimal**. Bullets and compact notation over prose. No filler, no
   restating the prompt, no marketing tone.
 - Per-claim structure inside sections follows **Answer → Why → How to apply / verify** (only the
@@ -115,9 +115,9 @@ ALWAYS include these. Omit one only if clearly irrelevant, and say why.
  
 ## Example trigger → action
  
-**Input:** "Hazme un reporte detallado comparando estrategias de encoding para alta cardinalidad."
-**Output:** An **English** `.md` report (even though the prompt is Spanish) with context box, TL;DR,
-comparison table, one section per strategy (each with Qué/Pros/Riesgos/Cómo → rendered in English as
-What/Pros/Risks/How), a critique of strategies that don't fit the stated model/target, diagnostics, a
-decision rule, and a final **References** section with web-verified doc links — delivered as a file
-plus a short chat summary (which may be in Spanish to match the user).
+**Input:** "Give me a detailed report comparing encoding strategies for high cardinality."
+**Output:** An **English** `.md` report (even if the prompt were in another language) with context
+box, TL;DR, comparison table, one section per strategy (What/Pros/Risks/How), a critique of
+strategies that don't fit the stated model/target, diagnostics, a decision rule, and a final
+**References** section with web-verified doc links — delivered as a file plus a short chat summary,
+also in English.
