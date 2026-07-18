@@ -69,6 +69,15 @@ LEAD resolves any conflict before the session proceeds.
 
 ---
 
+## Owner-Only Space
+
+`playground/` and any `*/analysis/` folder under `src/` belong to the project
+owner. No agent (LEAD, IMPLEMENTER, REVIEWER, ADVISOR) reads from, writes to,
+or depends on either — always — unless the owner explicitly says otherwise
+for a specific case. See `docs/CONVENTIONS.md` §11 for the full rule.
+
+---
+
 ## Session Protocol
 
 **Start:**
