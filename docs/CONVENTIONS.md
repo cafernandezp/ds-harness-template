@@ -150,19 +150,23 @@ any script under `src/inference/`, plus any `src/lib/` function that
 ## 16. Packaging
 - Official install method: `uv sync` (installs dependencies, creates
   `.venv/`, and installs the project itself in editable mode — no
-  separate `pip install -e .` step needed). Run `uv sync --extra dev` to
-  also include test-only dependencies.
+  separate `pip install -e .` step needed). Run `uv sync --group dev` to
+  also include test-only dependencies, or `uv sync --all-groups` for
+  everything (dev + notebooks + experiments) — see the `Makefile` targets
+  `install`/`install-dev`/`install-all`.
 - `uv.lock` is versioned in git — it pins the exact resolved version of
   every dependency (including transitive ones) so every clone gets an
   identical environment. Regenerate it with `uv lock` after changing
-  `dependencies` or `optional-dependencies` in `pyproject.toml`.
+  `dependencies` or any group in `pyproject.toml`.
 - `.venv/` is gitignored — never commit a virtual environment.
 - Any folder under `src/` that another module imports from using dotted
   notation (`from src.x.y import z`) needs an empty `__init__.py` — add it
   only when that import is actually written, not preemptively.
-- Runtime dependencies go in `[project.dependencies]`; test-only
-  dependencies (e.g. `pytest`) go in `[project.optional-dependencies]`
-  under a `dev` group.
+- Runtime dependencies go in `[project.dependencies]`; everything else goes
+  under `[dependency-groups]` in `pyproject.toml` — `dev` (pytest, ruff,
+  pre-commit), `experiments` (mlflow, optuna), `notebooks` (jupyter,
+  ipykernel). Add a new group here rather than `[project.dependencies]` if
+  it's not needed at runtime.
 
 ## 17. Git workflow
 - Commits (local): never automatic. Every commit — even local, before any
