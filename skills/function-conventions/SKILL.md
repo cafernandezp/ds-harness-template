@@ -1,3 +1,14 @@
+---
+name: function-conventions
+description: >-
+  Rubric for function-level code style: argument naming (df, seed),
+  docstring depth, when to extract a helper, and when the ≤4-args
+  keyword-only guideline applies. Consult before writing or reviewing any
+  function in src/ — activate whenever CONVENTIONS.md section 8 (Function
+  signatures) applies, or the user asks about argument naming, docstring
+  depth, helper extraction, or function-signature style in this repo.
+---
+
 # Function Conventions
 
 Consulted by IMPLEMENTER when writing any function, and by REVIEWER when

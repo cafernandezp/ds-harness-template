@@ -59,8 +59,7 @@ fewer than 4 parameters for pure `lib/` functions (e.g. `src.lib.metrics`,
 `src.lib.feature_selection`). Orchestration/logging functions that
 legitimately bundle several related values (e.g.
 `src.lib.experiment_tracking.log_run`) are exempt from this — see
-`skills/function-conventions/` for the full rubric and worked examples
-(pending — not yet written).
+`skills/function-conventions/` for the full rubric and worked examples.
 
 ## 9. Reproducibility
 - Fixed `random_state` across all splits, models, and stochastic steps.

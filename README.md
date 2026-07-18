@@ -113,19 +113,11 @@ data/                  # gitignored: raw + intermediate parquets
 
 ## Key invariants (don't break these)
 
-Full list in `docs/ARCHITECTURE.md`. The load-bearing ones:
-
-- Pipeline is one-way. `perimeter → features → target → train_test →
-  models → inference`. No upstream import from a downstream stage.
-- `src/lib/` has no upward dependencies. It is a leaf.
-- Transformers fit on train only. Enforced by review, not by types.
-- No sklearn `Pipeline` or `ColumnTransformer` — explicit function
-  calls only.
-- No hardcoded paths in `src/` — all locations go through
-  `src.lib.paths`.
-- One feature in progress at a time in `docs/memory/backlog.md`.
-- `reports/` is never a contract; nothing under `src/` reads from it
-  expecting a specific file.
+See "Architectural invariants" in `docs/ARCHITECTURE.md` for the full,
+authoritative list (one-way pipeline, `lib/` as a leaf, train-only
+fitting, no sklearn `Pipeline`/`ColumnTransformer`, no hardcoded paths,
+one feature in progress, `reports/` never a contract). Kept in one place
+so it can't drift out of sync with this file.
 
 ## License
 
