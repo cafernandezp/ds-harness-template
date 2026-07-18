@@ -29,6 +29,7 @@ force a report.
  
 - Deliver a single **`.md` file** written to the outputs directory, then present it. Do not dump the
   full report into the chat; give a short summary + the file.
+- **Filename MUST be prefixed `rr-`** (e.g. `rr-encoding-strategies.md`).
 - **The report is ALWAYS written in English**, regardless of the language the user writes in. The
   chat summary may follow the user's language, but the `.md` deliverable itself is English.
 - Style: **professional, direct, minimal**. Bullets and compact notation over prose. No filler, no
@@ -90,6 +91,7 @@ ALWAYS include these. Omit one only if clearly irrelevant, and say why.
 - [ ] Version-specific claims were web-verified and cited.
 - [ ] Report is written in English (even if the user wrote in another language); tone is minimal and direct.
 - [ ] Delivered as a `.md` file + short chat summary (not the whole report inline).
+- [ ] Filename prefixed `rr-`.
 ## Section template (copy and fill)
  
 ```markdown
