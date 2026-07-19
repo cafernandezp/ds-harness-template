@@ -41,8 +41,7 @@ format-check:
 
 # --------------------------------------------------------------------- run --
 
-# run:
-# 	uv run python -m your_package.main
+# Add a `run:` target here once the project has a real CLI entrypoint.
 
 # -------------------------------------------------------------------- test --
 

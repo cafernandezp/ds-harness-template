@@ -81,8 +81,9 @@ work and are invisible to every agent (LEAD, IMPLEMENTER, REVIEWER, ADVISOR)
 by default:
 - any folder named `analysis` anywhere under `src/` (typically scratch
   notebooks, tied to a specific pipeline stage);
-- the top-level `playground/` — free-form scratch, temporary code, and notes
-  outside the pipeline entirely.
+- the top-level `playground/` — free-form scratch, temporary code, notes,
+  and personal reference material (e.g. `playground/references/`) outside
+  the pipeline entirely.
 
 Both:
 - are not part of the reviewed pipeline;

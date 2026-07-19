@@ -92,7 +92,7 @@ src/
   models/              # per-model experiments and final_model
   inference/           # production-facing code (tests mandatory)
 tests/                 # mirrors src/ by relative path
-playground/            # free-form scratch, never imported from src/
+playground/            # scratch, notes, personal references — never imported from src/
 reports/               # gitignored: mlflow store, manual runs, generated artifacts
 data/                  # gitignored: raw + intermediate parquets
 ```
@@ -109,7 +109,7 @@ data/                  # gitignored: raw + intermediate parquets
 | Fitted artifact downstream must reproduce exactly | `.py` module under `src/`, never a CSV in `reports/` |
 | Anything regenerable by rerunning the pipeline | `reports/` or `data/` (both gitignored) |
 | Owner's personal scratch exploration | `src/<stage>/analysis/` — invisible to agents |
-| Free-form scratch, temp code, or notes outside the pipeline | `playground/` — invisible to agents |
+| Free-form scratch, temp code, notes, or personal references | `playground/` — invisible to agents |
 
 ## Key invariants (don't break these)
 

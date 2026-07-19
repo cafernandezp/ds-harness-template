@@ -118,8 +118,9 @@ to operate on `src/` and `docs/`.
 
 ### `playground/`
 
-Free-form scratch space outside the pipeline. Owner-only — see the
-"invisible to agents" invariant below. Never imported from `src/`.
+Free-form scratch space outside the pipeline — temporary code, notes, and
+personal reference material (e.g. `playground/references/`). Owner-only —
+see the "invisible to agents" invariant below. Never imported from `src/`.
 
 ## Architectural invariants
 
