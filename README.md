@@ -121,4 +121,4 @@ so it can't drift out of sync with this file.
 
 ## License
 
-TBD.
+MIT — see `LICENSE`.
