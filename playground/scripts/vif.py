@@ -130,6 +130,31 @@ def explain_feature_vif (
             positive_importance / total_positive_importance
         )
     else:
-        explainability[
+        explainability["pfi_relative"] = 0.0
+
+    explainability = (
+        explainability
+        .sort_values("pfi_mean", ascending=False)
+        .reset_index(drop=True)
+    )
+
+    summary = pd.DataFrame({
+        "feature": [feature],
+        "r2_auxiliary_regression": [r2],
+        "vif": [vif],
+        "n_predictors": [X.shape[1]],
+    })
+
+    return summary, explainability
+
+
+#Example of use:
+#vif = compute_vif(df[selected_features])
+#display(vif)
+
+#vif_summary, vif_explainability=explain_feature_vif(df=df[selected_features], feature="cases_open_hipotecario", n_repeats=20, random_state=SEED, n_jobs=-1)
+#display(vif_summary)
+#display(vif_explainability)
+
 
 
