@@ -46,11 +46,20 @@ Things only you can fill in before the harness is usable for real work:
 
 1. **Fill in `AGENTS.md` → Project Identity.** Name, task type, primary/secondary metric, phase, one-liner. Six placeholders.
 2. **Set metric defaults in `configs/global.yaml`.** Replace `mae`/`r2` with the project's actual choices (or leave for the first ADR).
-3. **Point the harness at your data.** `src.lib.paths.DATA_DIR` defaults to `<repo>/data`, which is enough if that's where your files live. If your data lives somewhere else (an external drive, another folder, a mounted path — anywhere the harness can read as a local path), copy `configs/local.yaml.example` to `configs/local.yaml` (gitignored, machine-specific, never committed) and set `data_root`:
-   ```yaml
-   data_root: /absolute/path/to/where/your/data/actually/lives
-   ```
-   Then drop your raw files under `<data_root>/raw/` — e.g. your CSVs. No override needed → skip this step, the default just works. Storage other than local disk (S3, GCS, ...) isn't wired up yet; that's a bigger change, made via ADR the day a project actually needs it — see `docs/ARCHITECTURE.md`.
+3. **Point the harness at your data.** `src.lib.paths.DATA_DIR` defaults to `<repo>/data`. If that's where your files live, skip the rest of this step — nothing else to do.
+
+   If your data lives somewhere else (an external drive, another folder, any mounted path the harness can read locally), do this instead:
+
+   1. Copy `configs/local.yaml.example` to `configs/local.yaml` (gitignored, machine-specific — never committed).
+   2. Open it and set `data_root` to your actual path:
+
+      ```yaml
+      data_root: /absolute/path/to/where/your/data/actually/lives
+      ```
+
+   3. Drop your raw files under `<data_root>/raw/` — e.g. your CSVs.
+
+   This only redirects the harness to a different local folder. Cloud storage (S3, GCS, ...) isn't supported yet — that's a bigger change, made via an ADR the day a project actually needs it (see `docs/ARCHITECTURE.md`).
 4. **Create the first `configs/models/<model_name>.yaml`** when the first real model appears — see `configs/models/README.md` for format.
 
 ## How a session works
