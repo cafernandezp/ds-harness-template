@@ -79,7 +79,7 @@ uv run python -c "from src.lib.paths import REPO_ROOT; print(REPO_ROOT)"
 
 ## Repo layout
 
-```
+```text
 AGENTS.md              # entry point for every agent — read fully before acting
 CLAUDE.md              # -> AGENTS.md (Claude Code convention)
 agents/                # per-agent instructions (LEAD, IMPLEMENTER, REVIEWER, ADVISOR)
@@ -111,7 +111,7 @@ data/                  # gitignored: raw + intermediate parquets
 ## Where things go — quick decision guide
 
 | Situation | Destination |
-|---|---|
+| --- | --- |
 | Persistent project decision (algorithm, protocol, threshold) | `docs/adr/` via LEAD + `create-adr` |
 | Technical exploration, options + tradeoffs, no decision | `docs/research-reports/` via ADVISOR + `ds-research-report` |
 | One-off implementation choice | `impl_<feature>.md` trace, not an ADR |
