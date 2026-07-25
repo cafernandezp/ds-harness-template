@@ -61,18 +61,39 @@ uv run python -c "from src.lib.paths import REPO_ROOT; print(REPO_ROOT)"
 
 ## Adapting the template to a new project
 
+Things only you can fill in before the harness is usable for real work:
+
 1. **Fill in `AGENTS.md` → Project Identity.** Name, task type,
    primary/secondary metric, phase, one-liner. Six placeholders.
 2. **Set metric defaults in `configs/global.yaml`.** Replace `mae`/`r2`
    with the project's actual choices (or leave for the first ADR).
-3. **Create the first `configs/models/<model_name>.yaml`** when the
+3. **Point the harness at your data.** `src.lib.paths.DATA_DIR` defaults
+   to `<repo>/data`, which is enough if that's where your files live.
+   If your data lives somewhere else (an external drive, another
+   folder, a mounted path — anywhere the harness can read as a local
+   path), copy `configs/local.yaml.example` to `configs/local.yaml`
+   (gitignored, machine-specific, never committed) and set `data_root`:
+   ```yaml
+   data_root: /absolute/path/to/where/your/data/actually/lives
+   ```
+   Then drop your raw files under `<data_root>/raw/` — e.g. your CSVs.
+   No override needed → skip this step, the default just works.
+   Storage other than local disk (S3, GCS, ...) isn't wired up yet; that's
+   a bigger change, made via ADR the day a project actually needs it —
+   see `docs/ARCHITECTURE.md`.
+4. **Create the first `configs/models/<model_name>.yaml`** when the
    first real model appears — see `configs/models/README.md` for
    format.
-4. **Launch a session and describe your first feature.** LEAD reads
+
+## How a session works
+
+Once the above is filled in:
+
+1. **Launch a session and describe your first feature.** LEAD reads
    `docs/memory/progress/current.md` and `docs/memory/backlog.md`
    (both start empty — there's no pre-loaded generic pipeline), then
    drafts a plan in `docs/memory/plans/`.
-5. **Approve the plan.** Once you sign off, LEAD adds the row to
+2. **Approve the plan.** Once you sign off, LEAD adds the row to
    `docs/memory/backlog.md` itself and delegates sub-tasks to
    IMPLEMENTER. You don't hand-edit the backlog table — LEAD owns it
    and only ever adds an entry after a plan is approved.
@@ -86,6 +107,8 @@ agents/                # per-agent instructions (LEAD, IMPLEMENTER, REVIEWER, AD
 skills/                # invocable skills (create-adr, ds-research-report, function-conventions)
 configs/
   global.yaml          # project-wide defaults
+  local.yaml.example   # template for local.yaml — copy it, don't edit in place
+  local.yaml           # gitignored, machine-specific (e.g. data_root override)
   models/              # per-model overrides (one file per model)
 docs/
   ARCHITECTURE.md      # pipeline order, stack, src/ structure, invariants
@@ -105,7 +128,8 @@ src/
 tests/                 # mirrors src/ by relative path
 playground/            # scratch, notes, personal references — never imported from src/
 reports/               # gitignored: mlflow store, manual runs, generated artifacts
-data/                  # gitignored: raw + intermediate parquets
+data/                  # gitignored: raw/ + etl/{perimeter,features,target,train_test}
+                       # location overridable via configs/local.yaml (data_root)
 ```
 
 ## Where things go — quick decision guide
@@ -119,6 +143,7 @@ data/                  # gitignored: raw + intermediate parquets
 | Helper used by exactly one script | nested next to that script, not in `lib/` |
 | Fitted artifact downstream must reproduce exactly | `.py` module under `src/`, never a CSV in `reports/` |
 | Anything regenerable by rerunning the pipeline | `reports/` or `data/` (both gitignored) |
+| Machine-specific override (data location, credentials) | `configs/local.yaml` (gitignored) |
 | Owner's personal scratch exploration | `src/<stage>/analysis/` — invisible to agents |
 | Free-form scratch, temp code, notes, or personal references | `playground/` — invisible to agents |
 

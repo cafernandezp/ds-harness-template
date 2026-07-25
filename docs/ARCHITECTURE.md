@@ -91,8 +91,9 @@ etl stage that defines who gets scored. Anything here — plus any
 
 Project-wide and per-model configuration. `global.yaml` holds project-wide
 keys (e.g. `use_mlflow`); per-model files override the subset of keys
-they care about. `configs/local.yaml` is machine-specific and gitignored;
-everything else is versioned because it encodes reviewable decisions.
+they care about. `configs/local.yaml` is machine-specific and gitignored (e.g. `data_root`,
+read by `src.lib.paths`); everything else is versioned because it encodes
+reviewable decisions.
 
 ### `reports/`
 

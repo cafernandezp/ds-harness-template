@@ -1,0 +1,10 @@
+# configs/local.yaml.example
+#
+# Copy this file to configs/local.yaml (gitignored — never commit it) to
+# override machine-specific settings. Right now the only key read by the
+# harness is `data_root`, consumed by src.lib.paths.
+#
+# If configs/local.yaml doesn't exist, or doesn't set data_root, the
+# harness defaults to <repo>/data — no setup required for a fresh clone.
+
+data_root: /absolute/path/to/where/your/data/actually/lives
