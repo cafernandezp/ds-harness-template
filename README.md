@@ -36,15 +36,22 @@ active feature. Everything below is scaffolding to be filled in.
 ## Quick start
 
 ```bash
-# Standard install: creates .venv and installs the project editable.
+# Runtime only: creates .venv, installs the project + runtime deps
+# (pandas, scikit-learn, xgboost, ...). No pytest, ruff, or mlflow.
 make install
 
-# With dev tools (pytest, ruff).
+# Runtime + dev tools: adds pytest, ruff, pre-commit.
 make install-dev
 
-# Everything — dev + notebooks + experiments (mlflow, optuna).
+# Runtime + dev + notebooks + experiments: adds jupyter/ipykernel
+# and mlflow/optuna on top of install-dev.
 make install-all
 ```
+
+Use `install` for a lean production/inference environment, `install-dev`
+for day-to-day development (you need this to run `make test` or `make
+lint`), and `install-all` only when you also want notebooks or
+experiment tracking.
 
 Verify:
 
@@ -61,10 +68,14 @@ uv run python -c "from src.lib.paths import REPO_ROOT; print(REPO_ROOT)"
 3. **Create the first `configs/models/<model_name>.yaml`** when the
    first real model appears — see `configs/models/README.md` for
    format.
-4. **Populate `docs/memory/backlog.md`.** No pre-loaded generic
-   pipeline — every entry is added only after a plan is approved.
-5. **Launch a session.** LEAD reads `docs/memory/progress/current.md`
-   and the backlog, decomposes the active feature, and delegates.
+4. **Launch a session and describe your first feature.** LEAD reads
+   `docs/memory/progress/current.md` and `docs/memory/backlog.md`
+   (both start empty — there's no pre-loaded generic pipeline), then
+   drafts a plan in `docs/memory/plans/`.
+5. **Approve the plan.** Once you sign off, LEAD adds the row to
+   `docs/memory/backlog.md` itself and delegates sub-tasks to
+   IMPLEMENTER. You don't hand-edit the backlog table — LEAD owns it
+   and only ever adds an entry after a plan is approved.
 
 ## Repo layout
 
