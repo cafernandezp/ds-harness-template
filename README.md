@@ -1,32 +1,16 @@
 # ds-harness
 
-Repository template for building a single supervised-learning model
-end-to-end with an AI multi-agent workflow. Clone, adapt, run — the
-harness enforces a linear pipeline (perimeter → features → target →
-train/test → models → inference), leakage-safe conventions, and a
-lightweight memory system so agent sessions stay coherent across time.
+Repository template for building a single supervised-learning model end-to-end with an AI multi-agent workflow. Clone, adapt, run — the harness enforces a linear pipeline (perimeter → features → target → train/test → models → inference), leakage-safe conventions, and a lightweight memory system so agent sessions stay coherent across time.
 
-Not a project — a starting point. There is no live model, no data, no
-active feature. Everything below is scaffolding to be filled in.
+Not a project — a starting point. There is no live model, no data, no active feature. Everything below is scaffolding to be filled in.
 
 ## What's in the box
 
-- **Four agents** (LEAD, IMPLEMENTER, REVIEWER, ADVISOR) with roles,
-  boundaries, and delegation flow defined in `AGENTS.md` and
-  `agents/*.md`. Same text loads as the system prompt in Claude Projects
-  or as `instructions` in the Codex/Agents SDK.
-- **Three skills** (`create-adr`, `ds-research-report`,
-  `function-conventions`) under `skills/` that agents invoke to produce
-  binding decisions, research reports, and convention-compliant code.
-- **A memory system** in `docs/memory/` — active session state, an
-  append-only session log, a per-feature backlog, and plans. LEAD owns
-  it; other agents write only their own trace files.
-- **A shared library skeleton** (`src/lib/`) with `paths`, `config`, and
-  `experiment_tracking` — the three cross-cutting utilities every DS
-  pipeline needs, wired to a single `use_mlflow` switch.
-- **Reviewed conventions** (`docs/CONVENTIONS.md`) and an
-  **architecture map** (`docs/ARCHITECTURE.md`) — the two documents
-  every agent reads before writing or reviewing code.
+- **Four agents** (LEAD, IMPLEMENTER, REVIEWER, ADVISOR) with roles, boundaries, and delegation flow defined in `AGENTS.md` and `agents/*.md`. Same text loads as the system prompt in Claude Projects or as `instructions` in the Codex/Agents SDK.
+- **Three skills** (`create-adr`, `ds-research-report`, `function-conventions`) under `skills/` that agents invoke to produce binding decisions, research reports, and convention-compliant code.
+- **A memory system** in `docs/memory/` — active session state, an append-only session log, a per-feature backlog, and plans. LEAD owns it; other agents write only their own trace files.
+- **A shared library skeleton** (`src/lib/`) with `paths`, `config`, and `experiment_tracking` — the three cross-cutting utilities every DS pipeline needs, wired to a single `use_mlflow` switch.
+- **Reviewed conventions** (`docs/CONVENTIONS.md`) and an **architecture map** (`docs/ARCHITECTURE.md`) — the two documents every agent reads before writing or reviewing code.
 
 ## Prerequisites
 
@@ -48,10 +32,7 @@ make install-dev
 make install-all
 ```
 
-Use `install` for a lean production/inference environment, `install-dev`
-for day-to-day development (you need this to run `make test` or `make
-lint`), and `install-all` only when you also want notebooks or
-experiment tracking.
+Use `install` for a lean production/inference environment, `install-dev` for day-to-day development (you need this to run `make test` or `make lint`), and `install-all` only when you also want notebooks or experiment tracking.
 
 Verify:
 
@@ -63,40 +44,21 @@ uv run python -c "from src.lib.paths import REPO_ROOT; print(REPO_ROOT)"
 
 Things only you can fill in before the harness is usable for real work:
 
-1. **Fill in `AGENTS.md` → Project Identity.** Name, task type,
-   primary/secondary metric, phase, one-liner. Six placeholders.
-2. **Set metric defaults in `configs/global.yaml`.** Replace `mae`/`r2`
-   with the project's actual choices (or leave for the first ADR).
-3. **Point the harness at your data.** `src.lib.paths.DATA_DIR` defaults
-   to `<repo>/data`, which is enough if that's where your files live.
-   If your data lives somewhere else (an external drive, another
-   folder, a mounted path — anywhere the harness can read as a local
-   path), copy `configs/local.yaml.example` to `configs/local.yaml`
-   (gitignored, machine-specific, never committed) and set `data_root`:
+1. **Fill in `AGENTS.md` → Project Identity.** Name, task type, primary/secondary metric, phase, one-liner. Six placeholders.
+2. **Set metric defaults in `configs/global.yaml`.** Replace `mae`/`r2` with the project's actual choices (or leave for the first ADR).
+3. **Point the harness at your data.** `src.lib.paths.DATA_DIR` defaults to `<repo>/data`, which is enough if that's where your files live. If your data lives somewhere else (an external drive, another folder, a mounted path — anywhere the harness can read as a local path), copy `configs/local.yaml.example` to `configs/local.yaml` (gitignored, machine-specific, never committed) and set `data_root`:
    ```yaml
    data_root: /absolute/path/to/where/your/data/actually/lives
    ```
-   Then drop your raw files under `<data_root>/raw/` — e.g. your CSVs.
-   No override needed → skip this step, the default just works.
-   Storage other than local disk (S3, GCS, ...) isn't wired up yet; that's
-   a bigger change, made via ADR the day a project actually needs it —
-   see `docs/ARCHITECTURE.md`.
-4. **Create the first `configs/models/<model_name>.yaml`** when the
-   first real model appears — see `configs/models/README.md` for
-   format.
+   Then drop your raw files under `<data_root>/raw/` — e.g. your CSVs. No override needed → skip this step, the default just works. Storage other than local disk (S3, GCS, ...) isn't wired up yet; that's a bigger change, made via ADR the day a project actually needs it — see `docs/ARCHITECTURE.md`.
+4. **Create the first `configs/models/<model_name>.yaml`** when the first real model appears — see `configs/models/README.md` for format.
 
 ## How a session works
 
 Once the above is filled in:
 
-1. **Launch a session and describe your first feature.** LEAD reads
-   `docs/memory/progress/current.md` and `docs/memory/backlog.md`
-   (both start empty — there's no pre-loaded generic pipeline), then
-   drafts a plan in `docs/memory/plans/`.
-2. **Approve the plan.** Once you sign off, LEAD adds the row to
-   `docs/memory/backlog.md` itself and delegates sub-tasks to
-   IMPLEMENTER. You don't hand-edit the backlog table — LEAD owns it
-   and only ever adds an entry after a plan is approved.
+1. **Launch a session and describe your first feature.** LEAD reads `docs/memory/progress/current.md` and `docs/memory/backlog.md` (both start empty — there's no pre-loaded generic pipeline), then drafts a plan in `docs/memory/plans/`.
+2. **Approve the plan.** Once you sign off, LEAD adds the row to `docs/memory/backlog.md` itself and delegates sub-tasks to IMPLEMENTER. You don't hand-edit the backlog table — LEAD owns it and only ever adds an entry after a plan is approved.
 
 ## Repo layout
 
@@ -149,11 +111,7 @@ data/                  # gitignored: raw/ + etl/{perimeter,features,target,train
 
 ## Key invariants (don't break these)
 
-See "Architectural invariants" in `docs/ARCHITECTURE.md` for the full,
-authoritative list (one-way pipeline, `lib/` as a leaf, train-only
-fitting, no sklearn `Pipeline`/`ColumnTransformer`, no hardcoded paths,
-one feature in progress, `reports/` never a contract). Kept in one place
-so it can't drift out of sync with this file.
+See "Architectural invariants" in `docs/ARCHITECTURE.md` for the full, authoritative list (one-way pipeline, `lib/` as a leaf, train-only fitting, no sklearn `Pipeline`/`ColumnTransformer`, no hardcoded paths, one feature in progress, `reports/` never a contract). Kept in one place so it can't drift out of sync with this file.
 
 ## License
 
