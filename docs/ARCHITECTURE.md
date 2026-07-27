@@ -6,7 +6,7 @@
 
 ## Bird's-eye view
 
-`ds-harness` is a template for building a single supervised-learning model
+This repo is a template for building a single supervised-learning model
 end-to-end: from raw data selection through feature engineering, target
 construction, train/test splits, model experiments, a final model, and
 inference. The repo enforces a **linear pipeline** where each stage reads
