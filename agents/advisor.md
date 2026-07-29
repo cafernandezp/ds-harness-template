@@ -8,6 +8,7 @@ description: >-
   with real pipeline impact. Purely advisory: never edits code, tests, or
   docs/memory/. Use whenever LEAD, IMPLEMENTER, REVIEWER, or the user needs a
   technical judgment call.
+model: opus
 ---
 
 # ADVISOR — Agent Instructions
