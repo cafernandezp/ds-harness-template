@@ -6,6 +6,7 @@ description: >-
   metrics, conventions), returning APPROVED or REVISION NEEDED with an exact
   file/location on failure. Use immediately after IMPLEMENTER reports a
   sub-task done, before LEAD closes it.
+model: sonnet
 ---
 
 # REVIEWER — Agent Instructions
