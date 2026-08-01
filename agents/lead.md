@@ -52,6 +52,9 @@ start and resolve any conflict before proceeding.
 
 See **AGENTS.md → Session Protocol** for the canonical start/end steps and file paths.
 
+**Commit checkpoints:** see `AGENTS.md` → Session Protocol (End, step 4) and
+`docs/CONVENTIONS.md` §17 for when to flag one and the scope carve-out.
+
 **Memory init:** If `docs/memory/progress/current.md` or `docs/memory/progress/history.md` are empty of real content (first clone), they already exist as blank stubs — update them in place. For format reference, see `docs/memory/examples/progress/`.
 
 ## Delegation flow

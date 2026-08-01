@@ -89,7 +89,9 @@ for a specific case. See `docs/CONVENTIONS.md` §11 for the full rule.
 1. LEAD marks completed sub-tasks in `current.md`.
 2. LEAD updates feature `status` in `docs/memory/backlog.md`.
 3. LEAD appends a session summary to `docs/memory/progress/history.md`.
-
+4. If a FEAT reached `APPROVED` or an ADR was written this session, LEAD
+   flags a commit checkpoint to the owner — scope and rules in
+   `docs/CONVENTIONS.md` §17.
 
 ## Engineering Principles
 

@@ -176,6 +176,21 @@ any script under `src/inference/`, plus any `src/lib/` function that
 - Author identity: the project owner's own git identity, not a separate
   "agent" identity — commits made by an agent are not distinguished in
   git history from ones made manually.
+- Commit granularity: for work that went through the full LEAD → IMPLEMENTER
+  → REVIEWER flow, one commit per closed unit — a FEAT reaching `APPROVED`,
+  an ADR written, a plan executed — not per file and not batched at the end
+  of a session. This 1:1 mapping is the default for that flow only; it does
+  not apply to quick fixes or ad hoc work done directly with LEAD outside
+  the full flow (see AGENTS.md → Role & boundaries → quick fixes). For that
+  work, the owner decides commit timing and whether to commit it themselves
+  or ask the agent to.
 - Commit message format: free-form, no fixed convention (e.g. no
   Conventional Commits prefix required). Keep messages short and
-  concise — optimize for fewer tokens, not for following a template.
+  concise — optimize for fewer tokens, not for following a template. When a
+  commit closes a FEAT or ADR, lead with its ID (`FEAT-021: ...`,
+  `ADR-2026-08-01: ...`) so history stays grep-able against the backlog.
+- Branches: default to a single working branch (`main`). Don't create a
+  long-lived `develop` — this harness assumes a single project owner, so
+  the extra layer buys no protection. Open a short-lived branch only for
+  risky or exploratory work that might get discarded (a refactor spike, an
+  approach you're not committed to yet); merge and delete it once resolved.
