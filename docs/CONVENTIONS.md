@@ -9,6 +9,21 @@
 - Library modules and stage-specific scripts must never share a filename
   (e.g. a shared `metrics.py` in `src/lib/` vs. a model-specific `evals.py`
   in `final_model/` — different names prevent trace ambiguity).
+- `src/etl/` scripts: the `df_` prefix is mandatory if and only if the
+  script persists a table to the project's data store — whatever
+  `src.lib.paths` resolves that to (§10; a local `data/` folder today,
+  potentially a different path or an S3 bucket later — the rule is about
+  the persistence call, not the literal string `data/`) — never based on
+  whether it merely returns an in-memory `DataFrame` to a caller. A script
+  that persists data must be named `df_<name>.py`; one that only returns a
+  `DataFrame` to whoever imports it keeps no prefix, even if it builds
+  that `DataFrame` internally. The output table name
+  matches the script's stem as closely as possible (`df_perimeter.py` →
+  `df_perimeter.parquet`), appending a short variant suffix only when one
+  script legitimately writes more than one table (`df_features.py` →
+  `df_features_12m.parquet`, `df_features_24m.parquet`,
+  `df_features_36m.parquet`). Parquet by default (§4); any other format
+  needs the owner's explicit sign-off, not an agent's own call.
 
 ## 2. Code style
 - Functional over OOP.
