@@ -30,11 +30,12 @@
 
 ## Skills
 
-| Skill                  | Invoked by  | Produces                                                 | Instructions                           |
-| ---------------------- | ----------- | -------------------------------------------------------- | -------------------------------------- |
-| `ds-research-report`   | ADVISOR     | Technical exploration report in `docs/research-reports/` | `skills/ds-research-report/SKILL.md`   |
-| `create-adr`           | LEAD        | Binding decision record in `docs/adr/`                   | `skills/create-adr/SKILL.md`           |
-| `function-conventions` | IMPLEMENTER | Code following project style and conventions             | `skills/function-conventions/SKILL.md` |
+| Skill                  | Invoked by       | Produces                                                                 | Instructions                           |
+| ---------------------- | ---------------- | ------------------------------------------------------------------------ | -------------------------------------- |
+| `ds-research-report`   | ADVISOR          | Technical exploration report in `docs/research-reports/`                 | `skills/ds-research-report/SKILL.md`   |
+| `create-adr`           | LEAD             | Binding decision record in `docs/adr/`                                   | `skills/create-adr/SKILL.md`           |
+| `explanation-report`   | LEAD (on demand) | Example-driven flow/mechanism walkthrough in `docs/explanation-reports/` | `skills/explanation-report/SKILL.md`   |
+| `function-conventions` | IMPLEMENTER      | Code following project style and conventions                             | `skills/function-conventions/SKILL.md` |
 
 ---
 
@@ -53,12 +54,13 @@
 
 ## Docs
 
-| File                     | Read by                                      | Contains                                                                |
-| ------------------------ | -------------------------------------------- | ----------------------------------------------------------------------- |
-| `docs/ARCHITECTURE.md`   | IMPLEMENTER (before every feature), REVIEWER | Pipeline order, approved stack, `src/` structure, active ADRs           |
-| `docs/CONVENTIONS.md`    | IMPLEMENTER, REVIEWER                        | Code style, naming, metrics, import rules, file formats                 |
-| `docs/adr/`              | All agents                                   | Binding project decisions — consult before reopening any decision       |
-| `docs/research-reports/` | ADVISOR, LEAD                                | Prior technical explorations — consult before writing on the same topic |
+| File                        | Read by                                      | Contains                                                                |
+| --------------------------- | -------------------------------------------- | ----------------------------------------------------------------------- |
+| `docs/ARCHITECTURE.md`      | IMPLEMENTER (before every feature), REVIEWER | Pipeline order, approved stack, `src/` structure, active ADRs           |
+| `docs/CONVENTIONS.md`       | IMPLEMENTER, REVIEWER                        | Code style, naming, metrics, import rules, file formats                 |
+| `docs/adr/`                 | All agents                                   | Binding project decisions — consult before reopening any decision       |
+| `docs/research-reports/`    | ADVISOR, LEAD                                | Prior technical explorations — consult before writing on the same topic |
+| `docs/explanation-reports/` | All agents (on demand)                       | Example-driven walkthroughs of already-built mechanisms/flows           |
 
 ---
 

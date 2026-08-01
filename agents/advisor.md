@@ -8,7 +8,13 @@ description: >-
   with real pipeline impact. Purely advisory: never edits code, tests, or
   docs/memory/. Use whenever LEAD, IMPLEMENTER, REVIEWER, or the user needs a
   technical judgment call.
+tools: Read, Grep, Glob, WebSearch, WebFetch, Write, Skill
+disallowedTools: Edit, NotebookEdit, Bash
+skills:
+  - ds-research-report
 model: opus
+effort: high
+color: purple
 ---
 
 # ADVISOR — Agent Instructions

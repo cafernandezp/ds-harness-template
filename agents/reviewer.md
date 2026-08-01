@@ -7,6 +7,9 @@ description: >-
   file/location on failure. Use immediately after IMPLEMENTER reports a
   sub-task done, before LEAD closes it.
 model: sonnet
+effort: high
+maxTurns: 30
+color: yellow
 ---
 
 # REVIEWER — Agent Instructions
