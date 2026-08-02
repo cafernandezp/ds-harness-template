@@ -88,7 +88,13 @@ legitimately bundle several related values (e.g.
   than anticipating every possible path upfront.
 - `src` imports resolve identically regardless of execution location
   because the repo is installed as a package via `uv sync` — see
-  section 16 (Packaging).
+  section 16 (Packaging). Verify with `uv pip list | grep ds-harness`
+  (present means installed), or — to actually prove location-independence —
+  invoke the venv interpreter by **absolute path** from an unrelated
+  directory: `cd /tmp && /path/to/repo/.venv/bin/python -c "import src"`.
+  Do **not** use `uv run` for this check: with no project discoverable from
+  the cwd it falls back to `$VIRTUAL_ENV`, so it can pass for reasons that
+  have nothing to do with the install and will hide a genuine regression.
 
 ## 11. Owner-only spaces (`*/analysis/` and `playground/`)
 Two kinds of folder are reserved for the project owner's personal, manual
